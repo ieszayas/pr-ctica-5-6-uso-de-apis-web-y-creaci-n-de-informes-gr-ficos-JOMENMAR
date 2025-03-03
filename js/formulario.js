@@ -80,3 +80,21 @@ document.getElementById('raza').addEventListener('change', function() {
         }
     }
 });
+
+// Fetch Random Cat Images for Carousel
+const catImageCount = 3;
+const catCarouselInner = document.getElementById('catCarouselInner');
+
+for (let i = 0; i < catImageCount; i++) {
+    fetch('https://api.thecatapi.com/v1/images/search?size=big')
+        .then(response => response.json())
+        .then(data => {
+            const isActive = i === 0 ? 'active' : '';
+            const newItem = document.createElement('div');
+            newItem.className = `carousel-item ${isActive}`;
+            newItem.innerHTML = `<img src="${data[0].url}" class="d-block w-100" alt="Random Cat">`;
+            catCarouselInner.appendChild(newItem);
+        })
+        .catch(error => console.error('Error fetching cat image:', error));
+}
+

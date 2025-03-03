@@ -1,4 +1,37 @@
 window.onload = function () {
+    // Datos predeterminados de gatos para la tabla en index.html
+    const defaultGatos = [
+        { nombre: "Luna", edad: 2, raza: "Siamés", ultimaVisita: "2024-02-15" },
+        { nombre: "Milo", edad: 4, raza: "Persa", ultimaVisita: "2024-01-20" },
+        { nombre: "Simba", edad: 3, raza: "Maine Coon", ultimaVisita: "2024-03-05" },
+        { nombre: "Nala", edad: 1, raza: "Bengala", ultimaVisita: "2024-02-28" },
+        { nombre: "Tom", edad: 5, raza: "Siamés", ultimaVisita: "2024-03-01" }
+    ];
+    
+    // Si no hay datos en localStorage, guardarlos
+    if (!localStorage.getItem('gatos')) {
+        localStorage.setItem('gatos', JSON.stringify(defaultGatos));
+    }
+    
+    // Extraer datos de gatos registrados en LocalStorage
+    const gatos = JSON.parse(localStorage.getItem('gatos')) || [];
+    
+    // Insertar datos en la tabla de index.html
+    const catTableBody = document.getElementById('catTableBody');
+    if (catTableBody) {
+        catTableBody.innerHTML = '';
+        gatos.forEach(gato => {
+            const newRow = catTableBody.insertRow();
+            newRow.innerHTML = `
+                <td>${gato.nombre}</td>
+                <td>${gato.raza}</td>
+                <td>${gato.edad} años</td>
+                <td>${gato.ultimaVisita}</td>
+                <td><i class="bi bi-star icon"></i></td>
+            `;
+        });
+    }
+    
     // Fetch Random Cat Fact
     fetch('https://catfact.ninja/fact')
         .then(response => response.json())
@@ -8,7 +41,7 @@ window.onload = function () {
         .catch(error => console.error('Error fetching cat fact:', error));
 
     // Fetch Random Cat Images for Carousel
-    const catImageCount = 3; // Number of images to fetch
+    const catImageCount = 3;
     const catCarouselInner = document.getElementById('catCarouselInner');
 
     for (let i = 0; i < catImageCount; i++) {
@@ -23,21 +56,6 @@ window.onload = function () {
             })
             .catch(error => console.error('Error fetching cat image:', error));
     }
-
-    // Populate Cat Data from Local Storage
-    const gatos = JSON.parse(localStorage.getItem('gatos')) || [];
-    const catTableBody = document.getElementById('catTableBody');
-
-    gatos.forEach(gato => {
-        const newRow = catTableBody.insertRow();
-        newRow.innerHTML = `
-            <td>${gato.nombre}</td>
-            <td>${gato.raza}</td>
-            <td>${gato.edad} años</td>
-            <td>${gato.ultimaVisita}</td>
-            <td><i class="bi bi-star icon"></i><i class="bi bi-star icon"></i></td>
-        `;
-    });
 
     // Fetch Weather Data
     document.getElementById('fetchWeather').addEventListener('click', function() {
